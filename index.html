@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-neutral-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kala-Vista</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc', 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 800: '#3730a3', 900: '#312e81', 950: '#1e1b4b',
+                        },
+                        secondary: {
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 800: '#92400e', 900: '#78350f', 950: '#451a03',
+                        },
+                        neutral: {
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e2937', 900: '#0f172a', 950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="h-full font-sans text-neutral-900">
+    <div id="app-container" class="relative mx-auto max-w-lg min-h-full bg-white shadow-2xl flex flex-col">
+
+        <header class="sticky top-0 z-20 flex items-center justify-between p-4 bg-white/80 backdrop-blur-lg border-b border-neutral-200">
+            <button id="back-button" class="p-2 rounded-full hover:bg-neutral-200 transition-colors hidden">
+                <i class="ph-bold ph-arrow-left text-xl text-neutral-600"></i>
+            </button>
+            <h1 id="app-title" class="text-xl font-bold text-center text-neutral-800" style="margin-left: auto; margin-right: auto;">
+                Welcome
+            </h1>
+            <div id="header-spacer" class="w-10 h-10"></div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-6 pb-24">
+            
+            <div id="view-portal-choice" class="view active space-y-8">
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto bg-primary-600 rounded-full shadow-lg flex items-center justify-center">
+                        <svg class="w-20 h-20 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 2V2.98" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.22 4.22L4.86 4.86" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12H2.98" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4.22 19.78L4.86 19.14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 22V21.02" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.78 19.78L19.14 19.14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 12H21.02" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.78 4.22L19.14 4.86" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="mt-6 text-3xl font-bold tracking-tight text-neutral-900">Kala-Vista</h2>
+                    <p class="mt-3 text-lg text-neutral-600">Your personal museum companion.</p>
+                </div>
+                <div class="space-y-4 pt-8">
+                    <button id="btn-go-visitor" class="group flex items-center justify-center w-full px-6 py-4 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="ph-bold ph-user text-2xl mr-3"></i>
+                        <span class="text-lg font-semibold">Visitor Portal</span>
+                    </button>
+                    <button id="btn-go-auditor" class="group flex items-center justify-center w-full px-6 py-4 bg-neutral-800 text-white rounded-xl shadow-lg hover:bg-neutral-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="ph-bold ph-chart-bar text-2xl mr-3"></i>
+                        <span class="text-lg font-semibold">Auditor Portal</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-home" class="view space-y-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-neutral-900">Visitor Portal</h2>
+                    <p class="mt-3 text-lg text-neutral-600">How would you like to explore?</p>
+                </div>
+                <div class="space-y-4">
+                    <button id="btn-go-identify" class="group flex items-center justify-center w-full px-6 py-4 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="ph-bold ph-camera text-2xl mr-3 transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="text-lg font-semibold">Identify by Picture</span>
+                    </button>
+                    <button id="btn-go-scan" class="group flex items-center justify-center w-full px-6 py-4 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="ph-bold ph-qr-code text-2xl mr-3 transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="text-lg font-semibold">Scan QR Code</span>
+                    </button>
+                    <button id="btn-go-tour" class="group flex items-center justify-center w-full px-6 py-4 bg-white text-neutral-900 border-2 border-neutral-300 rounded-xl shadow-sm hover:bg-neutral-50 transition-all duration-300 transform hover:scale-105">
+                        <i class="ph-bold ph-footprints text-2xl mr-3 transition-transform duration-300 group-hover:translate-x-1 text-primary-600"></i>
+                        <span class="text-lg font-semibold">View Guided Tour</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="view-identify" class="view">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold">Identify by Picture</h2>
+                    <p class="text-neutral-600">Take a picture or upload one to learn more.</p>
+                </div>
+                <div class="space-y-4 text-center">
+                    <input type="file" id="image-upload-input" accept="image/*" capture="environment">
+                    <label for="image-upload-input" class="file-upload-label !bg-primary-600 hover:!bg-primary-700">
+                        <i class="ph-bold ph-camera mr-2"></i>
+                        Open Camera / Upload
+                    </label>
+                    <div id="image-preview-container" class="hidden w-full aspect-square max-w-md mx-auto rounded-3xl bg-neutral-100 shadow-inner overflow-hidden flex items-center justify-center">
+                        <img id="image-preview" src="" alt="Image preview" class="w-full h-full object-cover">
+                    </div>
+                    <button id="btn-identify-image" class="w-full px-6 py-3 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition-colors text-lg font-semibold hidden">
+                        Verify Painting
+                    </button>
+                    <div id="identify-loader" class="hidden">
+                        <div class="loader"></div>
+                        <p id="identify-loader-text" class="text-neutral-600 font-medium">Verifying authenticity...</p>
+                    </div>
+                    <p id="identify-result" class="mt-4 text-center text-lg font-medium"></p>
+                </div>
+                <div class="mt-6 text-center">
+                    <h3 class="font-semibold text-neutral-700">Having trouble?</h3>
+                    <button id="btn-manual-select-1" class="mt-2 text-primary-600 font-medium hover:underline">
+                        Select from the tour list
+                    </button>
+                </div>
+            </div>
+
+
+            <div id="view-scan" class="view">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold">Scan QR Code</h2>
+                    <p class="text-neutral-600">Point your camera at the QR code next to the artwork.</p>
+                </div>
+                <div class="relative w-full aspect-square max-w-md mx-auto rounded-3xl bg-neutral-900 shadow-inner overflow-hidden">
+                    <div id="qr-reader" class="w-full"></div>
+                    <div id="qr-reader-line" class="hidden"></div>
+                    <div id="qr-scan-overlay" class="absolute inset-0 flex items-center justify-center bg-black/50">
+                        <p class="text-white text-lg font-medium">Starting camera...</p>
+                    </div>
+                </div>
+                <p id="qr-scan-result" class="mt-4 text-center text-green-600 font-medium"></p>
+                <div class="mt-6 text-center">
+                    <h3 class="font-semibold text-neutral-700">Having trouble?</h3>
+                    <button id="btn-manual-select-2" class="mt-2 text-primary-600 font-medium hover:underline">
+                        Select from the tour list
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-content" class="view space-y-6">
+                <img id="content-img" src="" alt="Exhibit Artwork" class="w-full h-auto rounded-2xl shadow-xl object-cover">
+                <div>
+                    <h2 id="content-title" class="text-3xl font-bold tracking-tight"></h2>
+                    <p id="content-artist" class="mt-1 text-xl text-neutral-600 font-medium"></p>
+                </div>
+                <div class="border-b border-neutral-200">
+                    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <button class="tab-btn border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300" data-tab="tab-about" aria-current="page">About</button>
+                        <button class="tab-btn border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300" data-tab="tab-story">Story</button>
+                        <button class="tab-btn border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300" data-tab="tab-media">Media</button>
+                        <button class="tab-btn border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300" data-tab="tab-related">Related</button>
+                    </nav>
+                </div>
+                <div class="py-2 space-y-6">
+                    <div id="tab-about" class="tab-content leading-relaxed text-neutral-700 text-base space-y-4">
+                        <p id="content-description"></p>
+                    </div>
+                    <div id="tab-story" class="tab-content hidden leading-relaxed text-neutral-700 text-base space-y-4">
+                        <p id="content-story"></p>
+                    </div>
+                    
+                    <div id="tab-media" class="tab-content hidden space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                <i class="ph-bold ph-ear mr-2 text-neutral-600"></i>
+                                Audio Commentary
+                            </h3>
+                            
+                            <button id="btn-listen-story" class="group flex items-center justify-center w-full px-6 py-3 bg-primary-600 text-white rounded-xl shadow-lg hover:bg-primary-700 transition-all duration-300">
+                                <i class="ph-bold ph-speaker-high text-2xl mr-3"></i>
+                                <span class="text-lg font-semibold">Listen to Story</span>
+                            </button>
+                            
+                            <button id="btn-stop-story" class="hidden group flex items-center justify-center w-full px-6 py-3 bg-red-600 text-white rounded-xl shadow-lg hover:bg-red-700 transition-all duration-300">
+                                <i class="ph-bold ph-stop text-2xl mr-3"></i>
+                                <span class="text-lg font-semibold">Stop Listening</span>
+                            </button>
+
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                <i class="ph-bold ph-video-camera mr-2 text-neutral-600"></i>
+                                Related Video
+                            </h3>
+                            <div class="aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+                                <iframe id="content-video" class="w-full h-full" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-related" class="tab-content hidden space-y-4">
+                        <p class="text-neutral-500">Loading related works...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-tour" class="view space-y-4">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold">Guided Tour</h2>
+                    <p class="text-neutral-600">Explore the collection at your own pace.</p>
+                </div>
+                <div id="tour-list-container" class="space-y-4">
+                    </div>
+            </div>
+            
+            <div id="view-auditor-login" class="view space-y-6">
+                <div class="text-center">
+                    <i class="ph-bold ph-chart-bar text-6xl text-neutral-800"></i>
+                    <h2 class="mt-4 text-3xl font-bold tracking-tight text-neutral-900">Auditor Portal</h2>
+                    <p class="mt-2 text-lg text-neutral-600">Please log in to view analytics.</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="password-input" class="block text-sm font-medium text-neutral-700">Password</label>
+                        <input type="password" id="password-input" class="mt-1 block w-full px-3 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-600 focus:border-primary-600" value="siddarth">
+                        <p class="mt-1 text-xs text-neutral-500">Hint: `siddarth`</p>
+                    </div>
+                    <button id="btn-auditor-login" class="w-full px-6 py-3 bg-neutral-800 text-white rounded-xl shadow-lg hover:bg-neutral-700 transition-colors text-lg font-semibold">
+                        Login
+                    </button>
+                    <p id="login-error" class="text-center text-red-600 font-medium"></p>
+                </div>
+            </div>
+            
+            <div id="view-dashboard" class="view space-y-8">
+                <div class="mb-2">
+                    <h2 class="text-2xl font-bold">Live Analytics Dashboard</h2>
+                    <p class="text-neutral-600">Real-time visitor engagement metrics.</p>
+                </div>
+
+                <button id="btn-go-manage-art" class="group flex items-center justify-center w-full px-6 py-3 bg-white text-neutral-900 border-2 border-neutral-300 rounded-xl shadow-sm hover:bg-neutral-50 transition-all">
+                    <i class="ph-bold ph-images text-xl mr-3 text-primary-600"></i>
+                    <span class="text-lg font-semibold">Manage Official Artworks</span>
+                </button>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-primary-50 p-4 rounded-xl shadow-md">
+                        <p class="text-sm font-medium text-primary-800">Total Visitors</p>
+                        <p id="stat-visitors" class="text-4xl font-bold text-primary-900">0</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-xl shadow-md">
+                        <p class="text-sm font-medium text-emerald-800">Total Exhibit Views</p>
+                        <p id="stat-views" class="text-4xl font-bold text-emerald-900">0</p>
+                    </div>
+                    <div class="bg-secondary-50 p-4 rounded-xl shadow-md">
+                        <p class="text-sm font-medium text-secondary-800">Avg. Dwell Time</p>
+                        <p id="stat-dwell-time" class="text-4xl font-bold text-secondary-900">0s</p>
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-xl shadow-md">
+                        <p class="text-sm font-medium text-rose-800">Most Popular</p>
+                        <p id="stat-popular" class="text-lg font-bold text-rose-900 leading-tight">Loading...</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Scanner & Verification Health</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-neutral-50 p-3 rounded-xl shadow-md text-center">
+                            <p class="text-sm font-medium text-neutral-800">QR Scans (Success)</p>
+                            <p id="stat-qr-success" class="text-3xl font-bold text-neutral-900">0</p>
+                        </div>
+                        <div class="bg-neutral-50 p-3 rounded-xl shadow-md text-center">
+                            <p class="text-sm font-medium text-neutral-800">QR Scans (Fails)</p>
+                            <p id="stat-qr-fail" class="text-3xl font-bold text-red-700">0</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded-xl shadow-md text-center">
+                            <p class="text-sm font-medium text-purple-800">AI Scans (Verified)</p>
+                            <p id="stat-ai-success" class="text-3xl font-bold text-purple-900">0</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-xl shadow-md text-center">
+                            <p class="text-sm font-medium text-red-800">AI Scans (Failed)</p>
+                            <p id="stat-ai-fail" class="text-3xl font-bold text-red-900">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Exhibit Popularity</h3>
+                    <div class="bg-neutral-50 p-4 rounded-xl shadow-md">
+                        <canvas id="exhibitPieChart" class="max-h-64 w-full"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Dwell Time by Exhibit (avg. sec)</h3>
+                    <div class="bg-neutral-50 p-4 rounded-xl shadow-md">
+                        <canvas id="dwellTimeBarChart" class="max-h-64 w-full"></canvas>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Live Event Feed</h3>
+                    <div id="live-feed-container" class="space-y-2 h-64 overflow-y-auto bg-neutral-50 p-3 rounded-lg border border-neutral-200">
+                        <p class="text-neutral-500">Waiting for live data...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="view-manage-art" class="view space-y-6">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold">Official Artworks</h2>
+                    <p class="text-neutral-600">This is the "database" of verified artworks the AI can recognize.</p>
+                </div>
+                
+                <div id="manage-art-list-container" class="space-y-4">
+                    </div>
+                
+                <button id="btn-add-new-art" class="w-full flex items-center justify-center px-6 py-3 bg-neutral-100 text-neutral-700 border-2 border-dashed border-neutral-400 rounded-xl hover:bg-neutral-200 transition-colors">
+                    <i class="ph-bold ph-plus text-xl mr-2"></i>
+                    <span class="text-lg font-semibold">Add New Official Artwork</span>
+                </button>
+                <p id="add-art-message" class="text-center text-sm text-neutral-500 hidden"></p>
+            </div>
+
+        </main>
+        
+        <div id="privacy-consent-banner" class="hidden absolute bottom-0 left-0 right-0 z-30 p-4 bg-neutral-900 text-white shadow-2xl rounded-t-2xl">
+            <div class="max-w-lg mx-auto">
+                <p class="text-sm text-neutral-300">
+                    To help the museum improve, this app anonymously collects how you interact with exhibits. We do not collect any personal data.
+                </p>
+                <div class="mt-4 flex gap-4">
+                    <button id="btn-accept-consent" class="flex-1 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow hover:bg-green-600 transition-colors">
+                        Accept
+                    </button>
+                    <button id="btn-decline-consent" class="flex-1 px-4 py-2 bg-neutral-700 text-white font-semibold rounded-lg hover:bg-neutral-600 transition-colors">
+                        Decline
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div> <script type="module" src="script.js"></script>
+
+</body>
+</html>
